@@ -19,6 +19,7 @@ public class PostListActivity extends AppCompatActivity {
 
     public static final String DATA_JSON_FILE_NAME = "data.json";
     private FeedDataStore feedDataStore;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
