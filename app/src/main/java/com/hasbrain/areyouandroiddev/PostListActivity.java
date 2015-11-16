@@ -10,6 +10,7 @@ import com.hasbrain.areyouandroiddev.model.RedditPostConverter;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +25,7 @@ public class PostListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResource());
+
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(RedditPost.class, new RedditPostConverter());
         Gson gson = gsonBuilder.create();
@@ -37,6 +39,7 @@ public class PostListActivity extends AppCompatActivity {
                     displayPostList(postList);
                 }
             });
+
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -52,6 +55,12 @@ public class PostListActivity extends AppCompatActivity {
 
     protected void displayPostList(List<RedditPost> postList) {
         //TODO: Display post list.
+        ListView listView = (ListView) findViewById(R.id.listView);
+        // use BaseAdapter
+        PostArrayAdapter adapter = new PostArrayAdapter(this, postList);
+        listView.setAdapter(adapter);
+
+
     }
 
     protected int getLayoutResource() {
