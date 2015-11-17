@@ -8,8 +8,11 @@ import com.hasbrain.areyouandroiddev.datastore.FileBasedFeedDataStore;
 import com.hasbrain.areyouandroiddev.model.RedditPost;
 import com.hasbrain.areyouandroiddev.model.RedditPostConverter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -51,16 +54,42 @@ public class PostListActivity extends AppCompatActivity {
                 }
             }
         }
+
+
     }
 
-    protected void displayPostList(List<RedditPost> postList) {
+    protected void displayPostList(final List<RedditPost> postList) {
         //TODO: Display post list.
         ListView listView = (ListView) findViewById(R.id.listView);
-        // use BaseAdapter
+        // Footer of listview
+        View footerView = getLayoutInflater().inflate(R.layout.footer_layout, null, false);
+        listView.addFooterView(footerView);
+        // !!! use BaseAdapter
         PostArrayAdapter adapter = new PostArrayAdapter(this, postList);
         listView.setAdapter(adapter);
 
+        // Click a post
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String url = postList.get(position).getUrl();
+                // For footer
+                if (position > postList.size() - 1) {
+                    url = "https://www.reddit.com/r/androiddev/";
+                }
+                showPost(url);
+            }
+        });
 
+
+    }
+
+    private void showPost(String url) {
+        Bundle data = new Bundle();
+        data.putString("url", url);
+        Intent intent = new Intent(this, PostViewActivity.class);
+        intent.putExtra("data", data);
+        startActivity(intent);
     }
 
     protected int getLayoutResource() {

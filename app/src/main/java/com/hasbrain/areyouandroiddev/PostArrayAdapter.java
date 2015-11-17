@@ -70,12 +70,17 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
         holder.tvSubreddit.setText(post.getSubreddit());
         holder.tvSticky.setText(post.isStickyPost() ? "[M]" : "");
         holder.tvTitle.setText(post.getTitle());
-        holder.tvCommentCount.setText(post.getCommentCount() + "");
+        holder.tvCommentCount.setText(showCommentCount(post.getCommentCount()));
         holder.tvDomain.setText(post.getDomain());
-//        holder.tvCreatedUTC.setText(post.getCreatedUTC() + "");
-        holder.tvCreatedUTC.setText(getTime(post.getCreatedUTC()*1000));
+        holder.tvCreatedUTC.setText(getTime(post.getCreatedUTC() * 1000));
+
+
 
         return rowView;
+    }
+
+    public String showCommentCount(int count) {
+        return (count < 2) ? count + " comment" : count + " comments";
     }
 
     // Show time when create a post
@@ -91,15 +96,15 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
         long aMonth = aDay * 30;
         long aYear = aMonth * 12;
 
-        if (diff < aMinute) {
+        if (diff < aMinute * 2) {
             result = diff / aSecond + " seconds";
-        } else if (diff < aHour) {
+        } else if (diff < aHour * 2) {
             result = diff / aMinute + " minutes";
-        } else if (diff < aDay) {
+        } else if (diff < aDay * 2) {
             result = diff / aHour + " hours";
-        } else if (diff < aMonth) {
+        } else if (diff < aMonth * 2) {
             result = diff / aDay + " days";
-        } else if (diff < aYear) {
+        } else if (diff < aYear * 2) {
             result = diff / aMonth + " months";
         } else {
             result = diff / aYear + " years";
