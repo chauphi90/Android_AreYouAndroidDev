@@ -1,6 +1,7 @@
 package com.hasbrain.areyouandroiddev;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import java.util.List;
  * Created by chauphi90 on 14/11/2015.
  */
 public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
-    // ??? add final modifier
     private Activity context;
     private List<RedditPost> list;
 
@@ -28,9 +28,7 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
 
     }
 
-    // ??? use static modifier
-    class ViewHolder {
-        // ??? use protected modifier
+    private class ViewHolder {
         private TextView tvScore;
         private TextView tvAuthor;
         private TextView tvSubreddit;
@@ -47,7 +45,6 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.post_item_layout, parent, false);
-            // ??? use final modifier
             ViewHolder viewHolder = new ViewHolder();
             viewHolder.tvScore = (TextView) rowView.findViewById(R.id.tvScore);
             viewHolder.tvAuthor = (TextView) rowView.findViewById(R.id.tvAuthor);
@@ -68,13 +65,18 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
         holder.tvScore.setText(post.getScore() + "");
         holder.tvAuthor.setText(post.getAuthor());
         holder.tvSubreddit.setText(post.getSubreddit());
-        holder.tvSticky.setText(post.isStickyPost() ? "[M]" : "");
         holder.tvTitle.setText(post.getTitle());
         holder.tvCommentCount.setText(showCommentCount(post.getCommentCount()));
         holder.tvDomain.setText(post.getDomain());
         holder.tvCreatedUTC.setText(getTime(post.getCreatedUTC() * 1000));
 
-
+        if (post.isStickyPost()) {
+            holder.tvSticky.setText("[M]");
+            holder.tvTitle.setTextColor(Color.parseColor("#387801"));
+        } else {
+            holder.tvSticky.setText("");
+            holder.tvTitle.setTextColor(Color.BLACK);
+        }
 
         return rowView;
     }
