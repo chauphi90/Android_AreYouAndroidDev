@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+
+    <!-- Set background color -->
+    <solid android:color="#111111" />
+
+
+    <!-- Circle radius at 4 angles -->
+    <corners android:radius="5dp" />
+
+
+</shape>

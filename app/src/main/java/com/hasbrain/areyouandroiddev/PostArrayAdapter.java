@@ -1,7 +1,12 @@
 package com.hasbrain.areyouandroiddev;
 
 import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.text.Html;
+import android.text.Spanned;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,24 +24,32 @@ import java.util.List;
 public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
     private Activity context;
     private List<RedditPost> list;
-
+    private int orientation;
+    private int defaultTextColor;
 
     public PostArrayAdapter(Activity context, List<RedditPost> list) {
         super(context, R.layout.post_item_layout, list);
         this.context = context;
         this.list = list;
+        initConfigVars();
+    }
 
+    private void initConfigVars() {
+        orientation = context.getResources().getConfiguration().orientation;
+
+        // Get text color from current theme
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(android.R.attr.textColor, typedValue, true);
+        defaultTextColor = typedValue.data;
     }
 
     private class ViewHolder {
         private TextView tvScore;
         private TextView tvAuthor;
-        private TextView tvSubreddit;
         private TextView tvSticky;
         private TextView tvTitle;
-        private TextView tvCommentCount;
-        private TextView tvDomain;
-        private TextView tvCreatedUTC;
+        private TextView tvInfoPlus;
     }
 
     @Override
@@ -45,16 +58,7 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
         if (convertView == null) {
             LayoutInflater inflater = context.getLayoutInflater();
             rowView = inflater.inflate(R.layout.post_item_layout, parent, false);
-            ViewHolder viewHolder = new ViewHolder();
-            viewHolder.tvScore = (TextView) rowView.findViewById(R.id.tvScore);
-            viewHolder.tvAuthor = (TextView) rowView.findViewById(R.id.tvAuthor);
-            viewHolder.tvSubreddit = (TextView) rowView.findViewById(R.id.tvSubreddit);
-            viewHolder.tvSticky = (TextView) rowView.findViewById(R.id.tvSticky);
-            viewHolder.tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
-            viewHolder.tvCommentCount = (TextView) rowView.findViewById(R.id.tvCommentCount);
-            viewHolder.tvDomain = (TextView) rowView.findViewById(R.id.tvDomain);
-            viewHolder.tvCreatedUTC = (TextView) rowView.findViewById(R.id.tvCreatedUTC);
-
+            ViewHolder viewHolder = createViewHolder(rowView);
             rowView.setTag(viewHolder);
         } else {
             rowView = convertView;
@@ -62,31 +66,59 @@ public class PostArrayAdapter extends ArrayAdapter<RedditPost> {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
         RedditPost post = list.get(position);
-        holder.tvScore.setText(post.getScore() + "");
-        holder.tvAuthor.setText(post.getAuthor());
-        holder.tvSubreddit.setText(post.getSubreddit());
-        holder.tvTitle.setText(post.getTitle());
-        holder.tvCommentCount.setText(showCommentCount(post.getCommentCount()));
-        holder.tvDomain.setText(post.getDomain());
-        holder.tvCreatedUTC.setText(getTime(post.getCreatedUTC() * 1000));
-
-        if (post.isStickyPost()) {
-            holder.tvSticky.setText("[M]");
-            holder.tvTitle.setTextColor(Color.parseColor("#387801"));
-        } else {
-            holder.tvSticky.setText("");
-            holder.tvTitle.setTextColor(Color.BLACK);
-        }
+        setPostContent(holder, post);
 
         return rowView;
     }
 
-    public String showCommentCount(int count) {
-        return (count < 2) ? count + " comment" : count + " comments";
+    private ViewHolder createViewHolder(View rowView) {
+        ViewHolder viewHolder = new ViewHolder();
+        viewHolder.tvScore = (TextView) rowView.findViewById(R.id.tvScore);
+        viewHolder.tvAuthor = (TextView) rowView.findViewById(R.id.tvAuthor);
+        viewHolder.tvSticky = (TextView) rowView.findViewById(R.id.tvSticky);
+        viewHolder.tvTitle = (TextView) rowView.findViewById(R.id.tvTitle);
+        viewHolder.tvInfoPlus = (TextView) rowView.findViewById(R.id.tvInfoPlus);
+        return viewHolder;
+    }
+
+    private void setPostContent(ViewHolder viewHolder, RedditPost post) {
+        viewHolder.tvScore.setText(post.getScore() + "");
+        viewHolder.tvAuthor.setText(getAuthor(post));
+        viewHolder.tvTitle.setText(post.getTitle());
+        viewHolder.tvInfoPlus.setText(getInfoPlus(post));
+
+        if (post.isStickyPost()) {
+            viewHolder.tvSticky.setText("[M]");
+            viewHolder.tvTitle.setTextColor(Color.parseColor("#387801"));
+        } else {
+            viewHolder.tvSticky.setText("");
+            viewHolder.tvTitle.setTextColor(defaultTextColor);
+        }
+    }
+
+    private Spanned getAuthor(RedditPost post) {
+        String author = post.getAuthor();
+        String subreddit = post.getSubreddit();
+        Spanned spanned;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            spanned = Html.fromHtml(author);
+        } else {
+            spanned = Html.fromHtml(author + " <small>in</small> " + subreddit);
+
+        }
+        return spanned;
+    }
+
+    public String getInfoPlus(RedditPost post) {
+        int cmtCount = post.getCommentCount();
+        String cmtStr = cmtCount + ((cmtCount > 1) ? " Comments" : " Comment");
+        String domain = post.getDomain();
+        String createdTime = this.getCreatedTime(post.getCreatedUTC());
+        return cmtStr + " • " + domain + " • " + createdTime;
     }
 
     // Show time when create a post
-    public String getTime(long num) {
+    public String getCreatedTime(long num) {
         String result = "";
         Date currentDate = new Date();
         long diff = currentDate.getTime() - num;

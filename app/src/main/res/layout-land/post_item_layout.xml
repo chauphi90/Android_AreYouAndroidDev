@@ -4,59 +4,37 @@
     android:layout_height="wrap_content"
     android:background="@drawable/item_background"
     android:orientation="vertical"
-    android:paddingBottom="15dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="10dp">
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvScore"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="11"
-            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
             android:text="AutoModerator"
-            android:textColor="#0A295A"
-            android:textSize="11sp" />
-
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="in"
-            android:textSize="10sp" />
+            android:textColor="@color/colorPrimary"
+            android:textSize="13sp" />
 
         <TextView
-            android:id="@+id/tvSubreddit"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvScore"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="androiddev"
-            android:textColor="#0A295A"
-            android:textSize="11sp" />
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:text="11"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvSticky"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:text="[M]"
-            android:textColor="@color/green"
-            android:textSize="12sp" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <TextView
@@ -64,55 +42,18 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_marginTop="5dp"
-        android:text="Weekly whos hiring thread!"
+        android:ellipsize="end"
+        android:lines="3"
+        android:text="Weekly whos hiring thread!" />
 
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvInfoPlus"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvCommentCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="19 Comments"
-            android:textSize="10sp" />
+        android:layout_marginTop="10dp"
+        android:text="19 Comments • self.androiddev • 2 days"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="10sp" />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="-3dp"
-            android:text="."
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvDomain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="self.androiddev"
-            android:textSize="10sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="-3dp"
-            android:text="."
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tvCreatedUTC"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
-            android:text="2 days"
-            android:textSize="10sp" />
-
-    </LinearLayout>
 </LinearLayout>

@@ -9,12 +9,13 @@ import com.hasbrain.areyouandroiddev.model.RedditPost;
 import com.hasbrain.areyouandroiddev.model.RedditPostConverter;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 
 import java.io.IOException;
@@ -44,7 +45,6 @@ public class PostListActivity extends AppCompatActivity {
                     displayPostList(postList);
                 }
             });
-
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -56,35 +56,37 @@ public class PostListActivity extends AppCompatActivity {
                 }
             }
         }
-
-
     }
 
     protected void displayPostList(final List<RedditPost> postList) {
-        //TODO: Display post list.
-        ListView listView = (ListView) findViewById(R.id.listView);
-
-        // Footer of listview
-        View footerView = getLayoutInflater().inflate(R.layout.footer_layout, null, false);
-        listView.addFooterView(footerView);
-
         BaseAdapter adapter = new PostArrayAdapter(this, postList);
-        listView.setAdapter(adapter);
+        AdapterView.OnItemClickListener listener = new AdapterView.OnItemClickListener() {
 
-        // Click a post
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // For footer
-                if (position > postList.size() - 1) {
+                if (position > postList.size() - 1) { // For footer
                     showPost("https://www.reddit.com/r/androiddev/");
                 } else {
                     showPost(postList.get(position).getUrl());
                 }
             }
-        });
 
+        };
 
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            ListView listView = (ListView) findViewById(R.id.listView);
+
+            // Footer of listview
+            View footerView = getLayoutInflater().inflate(R.layout.footer_layout, null, false);
+            listView.addFooterView(footerView);
+
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(listener);
+        } else {
+            GridView gridView = (GridView) findViewById(R.id.gridView);
+            gridView.setAdapter(adapter);
+            gridView.setOnItemClickListener(listener);
+        }
     }
 
     private void showPost(String url) {
@@ -98,4 +100,5 @@ public class PostListActivity extends AppCompatActivity {
     protected int getLayoutResource() {
         return R.layout.activity_post_list;
     }
+
 }

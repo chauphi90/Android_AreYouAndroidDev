@@ -1,16 +1,10 @@
 package com.hasbrain.areyouandroiddev;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 public class PostViewActivity extends AppCompatActivity {
 
@@ -41,7 +35,6 @@ public class PostViewActivity extends AppCompatActivity {
         dialog = ProgressDialog.show(this, "", "Loading ...");
         webView.loadUrl(url);
     }
-
 
     class PageWebViewClient extends WebViewClient {
 
