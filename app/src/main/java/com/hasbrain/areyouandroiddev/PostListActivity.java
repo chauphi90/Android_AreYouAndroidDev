@@ -89,7 +89,7 @@ public class PostListActivity extends AppCompatActivity {
         }
     }
 
-    private void showPost(String url) {
+    protected void showPost(String url) {
         Bundle data = new Bundle();
         data.putString("url", url);
         Intent intent = new Intent(this, PostViewActivity.class);
